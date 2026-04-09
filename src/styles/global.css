@@ -1,0 +1,90 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary-bg: #F8F7F4;
+  --primary-surface: #FFFFFF;
+  --primary-accent: #1B3A6B;
+  --primary-secondary: #2E7D5E;
+  --primary-error: #C0392B;
+  --primary-warning: #D4A017;
+  --text-primary: #1A1A2E;
+  --text-muted: #6B7280;
+}
+
+html {
+  color-scheme: light;
+}
+
+html.dark {
+  --primary-bg: #1A1A2E;
+  --primary-surface: #2D2D44;
+  --primary-accent: #5B8FC7;
+  --primary-secondary: #52B788;
+  --primary-error: #FF6B6B;
+  --primary-warning: #FFD93D;
+  --text-primary: #F8F7F4;
+  --text-muted: #A0AEC0;
+  color-scheme: dark;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: radial-gradient(1200px 600px at 10% 10%, rgba(27,58,107,0.08), transparent 8%),
+              radial-gradient(1000px 500px at 95% 90%, rgba(46,125,94,0.04), transparent 12%),
+              var(--primary-bg);
+  color: var(--text-primary);
+  font-family: 'DM Sans', sans-serif;
+  transition: background 300ms ease, color 200ms ease;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Playfair Display', serif;
+  font-weight: 600;
+}
+
+code, pre {
+  font-family: 'DM Mono', monospace;
+}
+
+/* Disable text selection for cheating prevention */
+.no-select {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+/* Smooth transitions */
+button, input, textarea, a {
+  transition: all 200ms ease;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--primary-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--text-muted);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-primary);
+}
