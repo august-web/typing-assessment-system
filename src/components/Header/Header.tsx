@@ -1,5 +1,5 @@
 import React from 'react'
-import { Moon, Sun } from 'lucide-react'
+import { Moon, Sun, Zap } from 'lucide-react'
 
 interface HeaderProps {
   isDarkMode: boolean
@@ -8,34 +8,37 @@ interface HeaderProps {
 
 export const Header: React.FC<HeaderProps> = ({ isDarkMode, onToggleDarkMode }) => {
   return (
-    <header className="fixed top-0 left-0 right-0 z-50">
-      <div className="mx-auto max-w-7xl px-6 py-3">
-        <div className="backdrop-blur-2xl bg-slate-950/60 dark:bg-slate-900/70 border border-white/10 rounded-[28px] shadow-soft p-3 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <div className="w-11 h-11 rounded-lg bg-gradient-to-br from-primary-accent to-primary-secondary flex items-center justify-center shadow-md">
-              <span className="text-white font-display font-bold text-lg">HP</span>
+    <header className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl">
+      <div className="mx-auto max-w-7xl px-6 py-4">
+        <div className="bg-gradient-to-r from-slate-950/80 via-slate-900/70 to-slate-950/80 border border-slate-700/50 rounded-2xl shadow-lg shadow-slate-900/50 p-4 flex items-center justify-between">
+          {/* Logo Section */}
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-teal-500 to-purple-600 flex items-center justify-center shadow-lg shadow-teal-500/20 hover:shadow-lg hover:shadow-teal-500/40 transition-all">
+              <Zap className="w-6 h-6 text-white" />
             </div>
-            <h1 className="text-lg font-display font-semibold text-primary-accent dark:text-white hidden sm:block">
-              High Priest Academy
-            </h1>
+            <div className="hidden sm:block">
+              <h1 className="text-lg font-display font-bold text-white hover:text-teal-300 transition-colors">
+                High Priest Academy
+              </h1>
+              <p className="text-xs text-slate-400 font-semibold">Typing Assessment</p>
+            </div>
           </div>
 
-          <div className="flex items-center gap-3">
-            <button
-              type="button"
-              onClick={onToggleDarkMode}
-              className="p-2 rounded-full bg-white/10 dark:bg-white/10 hover:bg-white/15 dark:hover:bg-white/15 transition-colors"
-              aria-label={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
-              aria-pressed={isDarkMode}
-              title={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
-            >
-              {isDarkMode ? (
-                <Sun className="w-5 h-5 text-yellow-400" />
-              ) : (
-                <Moon className="w-5 h-5 text-primary-accent" />
-              )}
-            </button>
-          </div>
+          {/* Theme Toggle */}
+          <button
+            type="button"
+            onClick={onToggleDarkMode}
+            className="p-3 rounded-xl bg-slate-800/50 hover:bg-slate-700/50 border border-slate-700/50 hover:border-teal-500/30 transition-all flex items-center justify-center"
+            aria-label={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+            aria-pressed={isDarkMode}
+            title={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+          >
+            {isDarkMode ? (
+              <Sun className="w-5 h-5 text-yellow-400 hover:text-yellow-300 transition-colors" />
+            ) : (
+              <Moon className="w-5 h-5 text-teal-400 hover:text-teal-300 transition-colors" />
+            )}
+          </button>
         </div>
       </div>
     </header>
