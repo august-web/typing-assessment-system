@@ -13,7 +13,6 @@ import { useTypingEngine } from './hooks/useTypingEngine'
 import { useLeaderboard } from './hooks/useLeaderboard'
 import { useAppContext } from './context/AppContext'
 import { getPerformanceRating } from './utils/calculations'
-import { saveToLeaderboard } from './utils/storage'
 import './styles/global.css'
 import { AssessmentResult } from './types'
 
@@ -32,7 +31,7 @@ export const App: React.FC = () => {
   const { state, dispatch } = useAppContext()
   const { leaderboard, sortBy, addEntry, sortLeaderboard, clearLeaderboard } = useLeaderboard()
 
-  const handleCompleteTest = () => {
+  const handleCompleteTest = async () => {
     const metrics = typingEngine.getMetrics()
     const timeTaken = Math.floor((1800 - timer.timeRemaining) / 60)
 
@@ -48,7 +47,7 @@ export const App: React.FC = () => {
       performanceRating: getPerformanceRating(metrics.wpm, metrics.accuracy)
     }
 
-    saveToLeaderboard(result)
+    // Save to server/leaderboard (async, but don't block)
     addEntry(result)
     // Keep the completed result in app state so ResultsDashboard can read it
     dispatch({ type: 'SET_RESULT', payload: result })
