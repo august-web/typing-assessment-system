@@ -241,11 +241,11 @@ button, input, textarea, a {
 }
 
 .card-light {
-  @apply card bg-white border-var(--border-light) shadow-sm hover:shadow-md;
+  @apply card bg-white border-slate-200 shadow-sm hover:shadow-md;
 }
 
 .card-dark {
-  @apply card bg-var(--primary-surface) border-var(--border-light) shadow-md hover:shadow-lg;
+  @apply card bg-slate-800 border-slate-700 shadow-md hover:shadow-lg;
 }
 
 /* Input styles */
@@ -288,11 +288,13 @@ html.dark select {
 }
 
 .badge-success {
-  @apply badge bg-var(--primary-success-light) text-var(--primary-success);
+  background-color: var(--primary-success-light);
+  color: var(--primary-success);
 }
 
 .badge-error {
-  @apply badge bg-var(--primary-error-light) text-var(--primary-error);
+  background-color: var(--primary-error-light);
+  color: var(--primary-error);
 }
 
 /* Utility classes */
