@@ -1,22 +1,42 @@
 import { TypingMetrics } from '../types'
 
-const REFERENCE_TEXT = `High Priest Academy,
+/**
+ * Generates the reference text with the student's name dynamically inserted.
+ * The student must type their own name where indicated.
+ */
+export const getReferenceText = (studentName: string = ''): string => {
+  if (!studentName) {
+    studentName = '(Student Enters Name Here)'
+  }
+
+  return `High Priest Academy School,
 Post Office Box KN 2012,
 Kaneshie-Accra.
 
-April 9, 2026
+14th April, 2026
 
 Dear Pastor Amponsah,
-                    I am very happy to write this letter to you. You have been a blessing to me and my family. I want to use this opportunity to thank you and All World Share Organization for your massive support.
-                    
-                    Thank you Pastor Andrews and your team for sponsoring us with these computers. They are really helping us in learning.
-                    
-                    May God Almighty bless you and give you long life. Thank you Pastor Amponsah and your team. Thank you High Priest Academy.
-                    
-                    Your Student,
-                    (Student writes his/her name here)`
 
-export const getReferenceText = (): string => REFERENCE_TEXT
+I am very happy to write this letter to you. You have been a blessing to me and my family. I want to use this opportunity to thank you and All World Share Organization for your massive support.
+
+Thank you Pastor Andrews and your team for sponsoring us with these computers. They are really helping us in learning. May God Almighty bless you and give you long life.
+
+Thank you Pastor Amponsah and your team. Thank you High Priest Academy.
+
+Your Student,
+${studentName}...`
+}
+
+/**
+ * Normalizes text by replacing multiple consecutive spaces with a single space
+ * and trimming leading/trailing whitespace. Preserves line breaks.
+ */
+export const normalizeText = (text: string): string => {
+  return text
+    .split('\n')
+    .map(line => line.replace(/\s+/g, ' ').trim())
+    .join('\n')
+}
 
 export const calculateWPM = (
   totalCharactersTyped: number,
@@ -67,6 +87,7 @@ export const compareTexts = (
   let correctCharacters = 0
 
   for (let i = 0; i < typedText.length; i++) {
+    // Character-by-character comparison - user must type exactly as shown
     const isCorrect = typedText[i] === referenceText[i]
     characterComparison.push(isCorrect)
     if (isCorrect) correctCharacters++
@@ -77,9 +98,10 @@ export const compareTexts = (
 
 export const calculateMetrics = (
   typedText: string,
-  timeRemaining: number
+  timeRemaining: number,
+  studentName: string = ''
 ): TypingMetrics => {
-  const referenceText = getReferenceText()
+  const referenceText = getReferenceText(studentName)
   const totalCharactersTyped = typedText.length
   const timeElapsed = (1800 - timeRemaining) / 60 // Convert seconds to minutes
   const timeElapsedMinutes = Math.max(timeElapsed, 0.016667) // Minimum 1 second

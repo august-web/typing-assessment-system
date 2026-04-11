@@ -6,6 +6,7 @@ interface TypingAreaProps {
   disabled: boolean
   hasMistake: boolean
   onStart?: () => void
+  maxLength?: number
 }
 
 export const TypingArea: React.FC<TypingAreaProps> = ({
@@ -13,11 +14,12 @@ export const TypingArea: React.FC<TypingAreaProps> = ({
   onChange,
   disabled,
   hasMistake,
-  onStart
+  onStart,
+  maxLength = 10000
 }) => {
   const textareaRef = React.useRef<HTMLTextAreaElement>(null)
 
-  // Prevent cheating: disable copy, paste, cut
+  // Prevent cheating: disable copy, paste, cut, right-click
   useEffect(() => {
     const textarea = textareaRef.current
     if (!textarea) return
@@ -58,11 +60,11 @@ export const TypingArea: React.FC<TypingAreaProps> = ({
     }
 
     textarea.addEventListener('keydown', handleKeyDown)
-  textarea.addEventListener('beforeinput', handleBeforeInput)
+    textarea.addEventListener('beforeinput', handleBeforeInput)
     textarea.addEventListener('contextmenu', handleContextMenu)
     textarea.addEventListener('drop', handleDrop)
     textarea.addEventListener('paste', handlePaste)
-  textarea.addEventListener('cut', handleCut)
+    textarea.addEventListener('cut', handleCut)
 
     return () => {
       textarea.removeEventListener('keydown', handleKeyDown)
@@ -75,35 +77,51 @@ export const TypingArea: React.FC<TypingAreaProps> = ({
   }, [hasMistake])
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    if (onStart && value.length === 0 && e.target.value.length > 0) {
+    const newValue = e.target.value
+    
+    // Trigger onStart callback on first keystroke
+    if (onStart && value.length === 0 && newValue.length > 0) {
       onStart()
     }
-    onChange(e.target.value)
+    
+    // Enforce character limit
+    if (newValue.length <= maxLength) {
+      onChange(newValue)
+    }
   }
 
   return (
     <div className="bg-slate-950/95 dark:bg-slate-900/95 rounded-[28px] shadow-soft p-6 border border-white/10">
-      <h3 className="text-sm font-semibold text-text-muted uppercase tracking-wide mb-4">
-        Type Your Response
-      </h3>
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-sm font-semibold text-text-muted uppercase tracking-wide">
+          Type Your Response
+        </h3>
+        <div className="text-xs text-text-muted">
+          {value.length} / {maxLength}
+        </div>
+      </div>
       
       <textarea
         ref={textareaRef}
         value={value}
         onChange={handleChange}
         disabled={disabled}
-        placeholder="Start typing the letter here. Your typing speed and accuracy will be measured..."
-        className="w-full h-48 px-4 py-3 bg-slate-900 border border-white/10 rounded-[20px] focus:border-primary-accent focus:outline-none resize-none font-mono text-sm leading-relaxed text-text-primary disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+        placeholder="Start typing the letter here. Pay careful attention to spacing, punctuation, and line breaks..."
+        maxLength={maxLength}
+        className="w-full h-64 px-4 py-3 bg-slate-900 border border-white/10 rounded-[20px] focus:border-primary-accent focus:outline-none resize-none font-mono text-sm leading-relaxed text-text-primary disabled:opacity-50 disabled:cursor-not-allowed transition-all"
       />
+      
       {hasMistake && (
         <div className="mt-3 rounded-lg bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 px-4 py-3 text-sm text-red-700 dark:text-red-200">
-          A mistake has been entered. Backspace/delete is locked so you can continue typing without removing the error.
+          ⚠️ A mistake has been entered. You cannot delete it, so continue typing carefully to minimize errors.
         </div>
       )}
       
-      <p className="text-xs text-text-muted mt-3">
-        💡 Tip: Typing will start the timer automatically on your first keystroke.
-      </p>
+      <div className="mt-4 pt-4 border-t border-white/10 space-y-1 text-xs text-text-muted">
+        <p>✓ Typing starts the timer on your first keystroke</p>
+        <p>✓ No copy, paste, or right-click allowed</p>
+        <p>✓ Errors cannot be deleted - type carefully</p>
+      </div>
     </div>
   )
 }

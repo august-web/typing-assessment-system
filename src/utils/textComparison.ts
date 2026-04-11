@@ -1,3 +1,7 @@
+/**
+ * Character-by-character comparison utility for typing assessment
+ * Handles comparison of user input against reference text
+ */
 export const textComparison = {
   highlightCharacter: (typed: string, reference: string, index: number): string => {
     if (index >= typed.length) return 'pending'
@@ -21,5 +25,24 @@ export const textComparison = {
     }
 
     return comparisons
+  },
+
+  /**
+   * Count consecutive errors from the first incorrect character
+   */
+  countConsecutiveErrors: (
+    typedText: string,
+    referenceText: string
+  ): number => {
+    let errorCount = 0
+    for (let i = 0; i < typedText.length; i++) {
+      if (typedText[i] !== referenceText[i]) {
+        errorCount++
+      } else if (errorCount > 0) {
+        // Stop counting after first correct character following errors
+        break
+      }
+    }
+    return errorCount
   }
 }

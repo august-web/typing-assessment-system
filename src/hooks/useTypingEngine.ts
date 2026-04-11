@@ -3,9 +3,9 @@ import { TypingMetrics } from '../types'
 import { calculateMetrics, getReferenceText } from '../utils/calculations'
 import { textComparison } from '../utils/textComparison'
 
-export const useTypingEngine = (timeRemaining: number) => {
+export const useTypingEngine = (timeRemaining: number, studentName: string = '') => {
   const [typedText, setTypedText] = useState<string>('')
-  const referenceText = getReferenceText()
+  const referenceText = getReferenceText(studentName)
 
   const handleTyping = useCallback((newText: string) => {
     // Allow only the first referenceText.length characters
@@ -14,8 +14,8 @@ export const useTypingEngine = (timeRemaining: number) => {
   }, [referenceText.length])
 
   const getMetrics = useCallback((): TypingMetrics => {
-    return calculateMetrics(typedText, timeRemaining)
-  }, [typedText, timeRemaining])
+    return calculateMetrics(typedText, timeRemaining, studentName)
+  }, [typedText, timeRemaining, studentName])
 
   const getCharacterComparisons = useCallback(
     (): ('correct' | 'incorrect' | 'pending')[] => {

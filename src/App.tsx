@@ -56,7 +56,7 @@ export const App: React.FC = () => {
   }
 
   const timer = useTimer(handleCompleteTest)
-  const typingEngine = useTypingEngine(timer.timeRemaining)
+  const typingEngine = useTypingEngine(timer.timeRemaining, state.studentName)
 
   // Update dark mode in DOM
   useEffect(() => {
