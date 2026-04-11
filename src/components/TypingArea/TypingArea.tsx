@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import { Keyboard, AlertCircle, Lock } from 'lucide-react'
 
 interface TypingAreaProps {
   value: string
@@ -90,37 +91,79 @@ export const TypingArea: React.FC<TypingAreaProps> = ({
     }
   }
 
+  const isFocused = textareaRef.current === document.activeElement
+
   return (
-    <div className="bg-slate-950/95 dark:bg-slate-900/95 rounded-[28px] shadow-soft p-6 border border-white/10">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-sm font-semibold text-text-muted uppercase tracking-wide">
-          Type Your Response
-        </h3>
-        <div className="text-xs text-text-muted">
-          {value.length} / {maxLength}
+    <div className={`glass-dark rounded-3xl shadow-lg p-8 border transition-all duration-300 flex flex-col h-full ${
+      isFocused ? 'border-teal-500/50 shadow-lg shadow-teal-500/20' : 'border-slate-700/50'
+    }`}>
+      {/* Header */}
+      <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-700/50">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-500/30 to-teal-500/30 flex items-center justify-center">
+            <Keyboard className="w-5 h-5 text-purple-400" />
+          </div>
+          <div>
+            <h3 className="text-sm font-bold text-white uppercase tracking-wider">Typing Area</h3>
+            <p className="text-xs text-slate-400">Type the letter exactly</p>
+          </div>
+        </div>
+        <div className="text-right">
+          <div className="text-2xl font-bold text-purple-400">{value.length}</div>
+          <div className="text-xs text-slate-400">/ {maxLength}</div>
         </div>
       </div>
-      
-      <textarea
-        ref={textareaRef}
-        value={value}
-        onChange={handleChange}
-        disabled={disabled}
-        placeholder="Start typing the letter here. Pay careful attention to spacing, punctuation, and line breaks..."
-        maxLength={maxLength}
-        className="w-full h-64 px-4 py-3 bg-slate-900 border border-white/10 rounded-[20px] focus:border-primary-accent focus:outline-none resize-none font-mono text-sm leading-relaxed text-text-primary disabled:opacity-50 disabled:cursor-not-allowed transition-all"
-      />
-      
+
+      {/* Textarea */}
+      <div className="flex-1 flex flex-col">
+        <textarea
+          ref={textareaRef}
+          value={value}
+          onChange={handleChange}
+          disabled={disabled}
+          placeholder="Start typing the letter here. Your response will appear here character by character..."
+          maxLength={maxLength}
+          className={`flex-1 px-5 py-4 bg-slate-800/50 backdrop-blur-sm border-2 rounded-2xl focus:outline-none resize-none font-body text-base leading-relaxed transition-all duration-200 ${
+            disabled ? 'opacity-50 cursor-not-allowed' : 'text-slate-100'
+          } ${
+            hasMistake 
+              ? 'border-red-500/60 text-red-300' 
+              : isFocused
+              ? 'border-teal-500 text-slate-100' 
+              : 'border-slate-700 text-slate-200'
+          } placeholder:text-slate-500`}
+        />
+      </div>
+
+      {/* Error/Warning Box */}
       {hasMistake && (
-        <div className="mt-3 rounded-lg bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 px-4 py-3 text-sm text-red-700 dark:text-red-200">
-          ⚠️ A mistake has been entered. You cannot delete it, so continue typing carefully to minimize errors.
+        <div className="mt-4 rounded-xl bg-red-500/10 border border-red-500/30 px-4 py-4 flex items-start gap-3 animate-slide-in">
+          <AlertCircle className="w-5 h-5 text-red-400 mt-0.5 flex-shrink-0" />
+          <div className="flex-1">
+            <p className="text-sm font-semibold text-red-300">Mistake Detected</p>
+            <p className="text-xs text-red-200/80 mt-1">
+              You've made a typing error. You cannot delete it. Continue typing carefully to maintain accuracy.
+            </p>
+          </div>
         </div>
       )}
-      
-      <div className="mt-4 pt-4 border-t border-white/10 space-y-1 text-xs text-text-muted">
-        <p>✓ Typing starts the timer on your first keystroke</p>
-        <p>✓ No copy, paste, or right-click allowed</p>
-        <p>✓ Errors cannot be deleted - type carefully</p>
+
+      {/* Security & Tips */}
+      <div className="mt-6 pt-6 border-t border-slate-700/50 space-y-3">
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+          <div className="flex items-center gap-2 text-xs text-slate-300">
+            <Lock className="w-4 h-4 text-teal-400" />
+            <span>No copy/paste</span>
+          </div>
+          <div className="flex items-center gap-2 text-xs text-slate-300">
+            <Keyboard className="w-4 h-4 text-purple-400" />
+            <span>Keyboard only</span>
+          </div>
+          <div className="flex items-center gap-2 text-xs text-slate-300">
+            <AlertCircle className="w-4 h-4 text-amber-400" />
+            <span>No deletion</span>
+          </div>
+        </div>
       </div>
     </div>
   )
