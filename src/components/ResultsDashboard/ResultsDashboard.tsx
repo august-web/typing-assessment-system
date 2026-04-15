@@ -13,6 +13,21 @@ export const ResultsDashboard: React.FC<ResultsDashboardProps> = ({
   onViewLeaderboard,
   onTakeAgain
 }) => {
+  const formatDuration = (seconds: number): string => {
+    const clampedSeconds = Math.max(0, Math.floor(seconds))
+    const minutes = Math.floor(clampedSeconds / 60)
+    const remainingSeconds = clampedSeconds % 60
+    return `${minutes.toString().padStart(2, '0')}:${remainingSeconds
+      .toString()
+      .padStart(2, '0')}`
+  }
+
+  // Prefer precise seconds when available; fallback for older minute-only records.
+  const elapsedSeconds =
+    typeof result.timeTakenSeconds === 'number'
+      ? result.timeTakenSeconds
+      : result.timeTaken * 60
+
   const getRatingColor = (
     rating: 'Excellent' | 'Good' | 'Fair' | 'Needs Improvement'
   ): { bg: string; text: string; border: string; gradient: string } => {
@@ -150,7 +165,9 @@ export const ResultsDashboard: React.FC<ResultsDashboardProps> = ({
                   <Clock className="w-5 h-5 text-purple-400" />
                   <span className="text-slate-400 text-sm font-semibold uppercase">Duration</span>
                 </div>
-                <p className="text-4xl font-bold text-purple-300">{result.timeTaken} <span className="text-lg text-slate-400">min</span></p>
+                <p className="text-4xl font-bold text-purple-300">
+                  {formatDuration(elapsedSeconds)} <span className="text-lg text-slate-400">mm:ss</span>
+                </p>
               </div>
             </div>
           </div>

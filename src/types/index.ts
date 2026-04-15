@@ -5,6 +5,7 @@ export interface AssessmentResult {
   accuracy: number
   errors: number
   timeTaken: number
+  timeTakenSeconds?: number
   textCompleted: number
   date: string
   performanceRating: 'Excellent' | 'Good' | 'Fair' | 'Needs Improvement'

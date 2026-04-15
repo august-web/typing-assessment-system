@@ -32,8 +32,10 @@ export const App: React.FC = () => {
   const { leaderboard, sortBy, addEntry, sortLeaderboard, clearLeaderboard } = useLeaderboard()
 
   const handleCompleteTest = async () => {
+    timer.pauseTimer()
     const metrics = typingEngine.getMetrics()
-    const timeTaken = Math.floor((1800 - timer.timeRemaining) / 60)
+    const timeTakenSeconds = Math.max(0, 1800 - timer.timeRemaining)
+    const timeTaken = Math.floor(timeTakenSeconds / 60)
 
     const result: AssessmentResult = {
       id: crypto.randomUUID(),
@@ -42,6 +44,7 @@ export const App: React.FC = () => {
       accuracy: metrics.accuracy,
       errors: metrics.errors,
       timeTaken,
+      timeTakenSeconds,
       textCompleted: metrics.progress,
       date: new Date().toISOString(),
       performanceRating: getPerformanceRating(metrics.wpm, metrics.accuracy)
